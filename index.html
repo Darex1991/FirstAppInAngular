@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html ng-app="PriceCalculatorApp">
+
+<head lang="en">
+    <meta charset="utf-8">
+    <title>Custom Plunker</title>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>
+    <script src="//underscorejs.org/underscore.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <script>
+        document.write('<base href="' + document.location + '" />');
+    </script>
+    <script src="app.js"></script>
+</head>
+
+<body>
+    <div ng-controller="UserController">
+        <div class="container">
+            <h1> User</h1>
+            <ul ng-repeat="user in users">
+                <li>
+                    {{user.name}}
+                    {{user.age}}
+
+                    <a href="#" class="edit" ng-click="editUser(user)">Edit</a>
+                    <a href="#" class="edit" ng-click="deleteUser(user)">Delete</a>
+
+                    <div ng-controller="NotesController">
+                        <a href="" class="toggleNotes" ng-click="toggleNotes(user)">Toggle</a>
+
+                        <div ng-show="user.isNotesDisplaying">
+                            <ul>
+                                <li>
+                                    <div style="display: block">
+                                        <a href="" ng-click="toggleAddNote(user)">Add note</a>
+                                        <input ng-model="newNote.text" ng-show="user.toggleAddNewNote"/>
+                                        <a href="" ng-click="createNewNote(user)" ng-show="user.toggleAddNewNote">Save new
+                                            Note</a>
+                                    </div>
+                                </li>
+                                <li ng-repeat="note in user.notes">
+                                    {{note.text}}
+
+                                    <div style="display: block">
+                                        <a href="" ng-click="toggleEdit(note)">Edit note</a>
+                                        <input ng-model="note.text" ng-show="note.showEditNote"/>
+                                        <a href="" ng-click="saveEditNote(note)" ng-show="note.showEditNote">Save edit
+                                            note</a>
+                                    </div>
+                                    <a href="" ng-click="deleteNote(note, user)">Delete note</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </li>
+            </ul>
+            <div ng-show="currentUser">
+                <input type="text" ng-model="currentUser.name"/>
+                <input type="text" ng-model="currentUser.age"/>
+                <a href="#" ng-click="saveNew(currentUser)">Save </a>
+
+            </div>
+            <a href="#" ng-click="createNewUser()"> Create new</a>
+
+            <div ng-repeat="newUser in newUsers">
+                <input type="text" ng-model="newUser.name"/>
+                <input type="text" ng-model="newUser.age"/>
+                <a href="" ng-click="save(newUser)"> Save new user</a>
+            </div>
+
+        </div>
+    </div>
+    <div ng-controller="CalculateController">
+        <div class="container">
+            <h1> Calc</h1>
+
+            <div class="price">
+                <div>
+                    <label>Item Price</label>
+                    <input ng-model="item.price"/>
+                </div>
+                <div>
+                    <label>Item quantity</label>
+                    <input ng-model="item.quantity"/>
+                </div>
+            </div>
+
+            <div class="tax-rate">
+                <table>
+                    <tr ng-repeat="taxRate in taxRates">
+                        <td style="width:100px"><input type="radio" ng-model="item.taxRate" group="taxRate"
+                                                       value="{{taxRate.rate}}"/></td>
+                        <td style="width:100px"><p>{{taxRate.name}}</p></td>
+                        <td><p>{{taxRate.rate}}%</p></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="discount">
+                <table>
+                    <tr ng-repeat="discount in discounts">
+                        <td style="width:100px"><p>${{discount.price}}</p></td>
+                        <td><p>{{discount.discountRate}}%</p></td>
+                    </tr>
+                </table>
+            </div>
+            <div>{{item.price * item.quantity | currency: '$'}}</div>
+
+            {{item.taxRate}}%
+            <div>$scope.price = {{price()}}</div>
+            <<{{getDiscount().price}}>>
+        </div>
+    </div>
+</body>
+
+</html>
